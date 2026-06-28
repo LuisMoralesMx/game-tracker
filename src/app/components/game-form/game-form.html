@@ -1,0 +1,120 @@
+<div class="form-container">
+  <div class="form-header">
+    <h2>
+      @if (isEditMode()) {
+      Reflect on "{{ title() }}"
+      } @else {
+      Log a New Adventure
+      }
+    </h2>
+    <p>
+      @if (isEditMode()) {
+      Update your progress, rating, and personal logs.
+      } @else {
+      Add a new title to your library and begin tracking.
+      }
+    </p>
+  </div>
+
+  <form (submit)="saveGame(); $event.preventDefault();" class="cozy-form" novalidate>
+    <!-- Title -->
+    <div class="form-group">
+      <label for="game-title" class="form-label required">Game Title</label>
+      <input id="game-title" type="text" [(ngModel)]="title" name="title" placeholder="e.g. Outer Wilds"
+        class="form-control" [class.has-error]="showTitleError()" (input)="showTitleError.set(false)" required />
+      @if (showTitleError()) {
+      <span class="error-message" id="title-error">Please enter the game's title.</span>
+      }
+    </div>
+
+    <!-- Platform -->
+    <div class="form-group">
+      <label for="game-platform" class="form-label">Platform</label>
+      <input id="game-platform" type="text" [(ngModel)]="platform" name="platform"
+        placeholder="e.g. Nintendo Switch, PC" class="form-control" list="platforms-list" />
+      <datalist id="platforms-list">
+        @for (plat of standardPlatforms; track plat) {
+        <option [value]="plat"></option>
+        }
+      </datalist>
+    </div>
+
+    <!-- Status & Rating Grid -->
+    <div class="form-grid">
+      <!-- Status -->
+      <div class="form-group">
+        <label for="game-status" class="form-label">Gameplay Status</label>
+        <select id="game-status" [(ngModel)]="status" name="status" class="form-select">
+          <option value="Backlog">Backlog</option>
+          <option value="Playing">Playing</option>
+          <option value="Completed">Completed</option>
+          <option value="Abandoned">Abandoned</option>
+        </select>
+      </div>
+
+      <!-- Rating -->
+      <div class="form-group">
+        <label for="game-rating" class="form-label">Personal Rating (1-10)</label>
+        <div class="rating-control">
+          <input id="game-rating" type="range" min="1" max="10" [(ngModel)]="rating" name="rating" class="form-range" />
+          <span class="rating-display">⭐ {{ rating() }}/10</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Play Time -->
+    <div class="form-group">
+      <label for="game-playtime" class="form-label">Hours Logged</label>
+      <div class="number-input-group">
+        <input id="game-playtime" type="number" min="0" [(ngModel)]="playTime" name="playTime" class="form-control"
+          placeholder="0" />
+        <span class="input-suffix">hours</span>
+      </div>
+    </div>
+
+    <!-- Dates Grid -->
+    <div class="form-grid">
+      <!-- Start Date -->
+      <div class="form-group">
+        <label for="game-start-date" class="form-label">Date Started</label>
+        <input id="game-start-date" type="date" [(ngModel)]="startDate" name="startDate" class="form-control" />
+      </div>
+
+      <!-- Completion Date -->
+      @if (showCompletionDate()) {
+      <div class="form-group fade-in">
+        <label for="game-completion-date" class="form-label">Date Completed</label>
+        <input id="game-completion-date" type="date" [(ngModel)]="completionDate" name="completionDate"
+          class="form-control" />
+      </div>
+      }
+    </div>
+
+    <!-- Notes / Review -->
+    <div class="form-group">
+      <label for="game-notes" class="form-label">Thoughts & Reflection</label>
+      <textarea id="game-notes" [(ngModel)]="notes" name="notes" rows="4"
+        placeholder="Write a brief review, highlight memorable moments, or note down why you chose to play this..."
+        class="form-control textarea-control"></textarea>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="form-actions">
+      <div class="left-actions">
+        @if (isEditMode()) {
+        <button type="button" (click)="deleteGame()" class="btn btn-danger" id="form-delete-btn">
+          🗑️ Delete Game
+        </button>
+        }
+      </div>
+      <div class="right-actions">
+        <button type="button" routerLink="/library" class="btn btn-secondary" id="form-cancel-btn">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" id="form-submit-btn">
+          💾 Save Journal Entry
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

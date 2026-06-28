@@ -1,0 +1,161 @@
+<div class="library-header">
+  <div class="header-text">
+    <h2>Your Gaming Journal</h2>
+    <p>A collection of your experiences, backlogs, and completions.</p>
+  </div>
+  <a routerLink="/game/new" class="btn btn-primary" id="library-add-game-btn">
+    ➕ Add New Game
+  </a>
+</div>
+
+<!-- Filters Panel -->
+<div class="filters-panel">
+  <!-- Search -->
+  <div class="search-box">
+    <label for="search-input" class="sr-only">Search games</label>
+    <span class="search-icon" aria-hidden="true">🔍</span>
+    <input 
+      id="search-input"
+      type="text" 
+      placeholder="Search games by title..." 
+      [value]="searchQuery()" 
+      (input)="updateSearchQuery($event)"
+      class="filter-input search-input"
+    />
+  </div>
+
+  <!-- Select Dropdowns -->
+  <div class="dropdowns-group">
+    <!-- Platform Filter -->
+    <div class="filter-control">
+      <label for="platform-filter" class="filter-label">Platform</label>
+      <select 
+        id="platform-filter"
+        [(ngModel)]="selectedPlatform" 
+        class="filter-select"
+      >
+        <option value="All">All Platforms</option>
+        @for (platform of availablePlatforms(); track platform) {
+          <option [value]="platform">{{ platform }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Sort By -->
+    <div class="filter-control">
+      <label for="sort-select" class="filter-label">Sort By</label>
+      <select 
+        id="sort-select"
+        [(ngModel)]="selectedSort" 
+        class="filter-select"
+      >
+        <option value="updatedAtDesc">Recently Updated</option>
+        <option value="titleAsc">Title (A-Z)</option>
+        <option value="titleDesc">Title (Z-A)</option>
+        <option value="ratingDesc">Rating (High-Low)</option>
+        <option value="playTimeDesc">Play Time (Most-Least)</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Status Navigation Tabs -->
+<nav class="status-tabs" aria-label="Filter library by status">
+  <button 
+    (click)="updateStatusFilter('All')" 
+    [class.active]="selectedStatus() === 'All'"
+    class="tab-btn"
+  >
+    All
+  </button>
+  <button 
+    (click)="updateStatusFilter('Backlog')" 
+    [class.active]="selectedStatus() === 'Backlog'"
+    class="tab-btn"
+  >
+    Backlog
+  </button>
+  <button 
+    (click)="updateStatusFilter('Playing')" 
+    [class.active]="selectedStatus() === 'Playing'"
+    class="tab-btn"
+  >
+    Playing
+  </button>
+  <button 
+    (click)="updateStatusFilter('Completed')" 
+    [class.active]="selectedStatus() === 'Completed'"
+    class="tab-btn"
+  >
+    Completed
+  </button>
+  <button 
+    (click)="updateStatusFilter('Abandoned')" 
+    [class.active]="selectedStatus() === 'Abandoned'"
+    class="tab-btn"
+  >
+    Abandoned
+  </button>
+</nav>
+
+<!-- Games List/Grid -->
+@if (filteredGames().length > 0) {
+  <div class="games-grid">
+    @for (game of filteredGames(); track game.id) {
+      <article class="game-card" [routerLink]="['/game', game.id]">
+        <div class="card-header">
+          <h3 class="game-title">{{ game.title }}</h3>
+          <span [class]="getStatusClass(game.status)">{{ game.status }}</span>
+        </div>
+
+        <div class="card-meta">
+          <span class="meta-tag platform-tag">🎮 {{ game.platform }}</span>
+          @if (game.playTime > 0) {
+            <span class="meta-tag hours-tag">⏳ {{ game.playTime }} hrs</span>
+          } @else {
+            <span class="meta-tag hours-tag">⏳ 0 hrs</span>
+          }
+        </div>
+
+        <div class="card-rating" [attr.aria-label]="'Rating ' + game.rating + ' out of 10'">
+          <span class="rating-stars" aria-hidden="true">{{ getRatingStars(game.rating) }}</span>
+          <span class="rating-number">{{ game.rating }}/10</span>
+        </div>
+
+        @if (game.notes) {
+          <blockquote class="card-notes">
+            "{{ game.notes }}"
+          </blockquote>
+        }
+
+        <div class="card-dates">
+          @if (game.startDate) {
+            <span>Started: {{ game.startDate }}</span>
+          }
+          @if (game.status === 'Completed' && game.completionDate) {
+            <span> • Completed: {{ game.completionDate }}</span>
+          }
+        </div>
+        
+        <div class="card-footer-overlay">
+          <span>Click to view details or edit</span>
+        </div>
+      </article>
+    }
+  </div>
+} @else {
+  <div class="empty-state">
+    <div class="empty-icon">☕</div>
+    <h3>No games found</h3>
+    <p>Try adjusting your filters or add a new game to your journal.</p>
+    @if (searchQuery() || selectedStatus() !== 'All' || selectedPlatform() !== 'All') {
+      <button 
+        (click)="searchQuery.set(''); selectedStatus.set('All'); selectedPlatform.set('All');" 
+        class="btn btn-secondary"
+        style="margin-top: 1rem;"
+      >
+        Reset Filters
+      </button>
+    }
+  </div>
+}

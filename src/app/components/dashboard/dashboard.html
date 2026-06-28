@@ -1,0 +1,34 @@
+<div class="dashboard-hero">
+  <h2 class="welcome-title">Welcome to your Cozy Library</h2>
+  <p class="welcome-subtitle">A quiet, personal space to track the games you've experienced and the adventures that lie ahead.</p>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon" aria-hidden="true">📚</div>
+    <div class="stat-info">
+      <span class="stat-label">Total Games</span>
+      <span class="stat-value" id="dashboard-total-games">{{ totalGames() }}</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" aria-hidden="true">✨</div>
+    <div class="stat-info">
+      <span class="stat-label">Completed Games</span>
+      <span class="stat-value" id="dashboard-completed-games">{{ completedGames() }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="quick-actions-panel">
+  <h3>Begin a New Log</h3>
+  <p>Tracked games are saved locally in your browser storage.</p>
+  <div class="action-buttons">
+    <a routerLink="/game/new" class="btn btn-primary" id="dashboard-add-game-btn">
+      <span>➕</span> Add a Game
+    </a>
+    <a routerLink="/library" class="btn btn-secondary" id="dashboard-browse-lib-btn">
+      <span>📖</span> Browse Library
+    </a>
+  </div>
+</div>

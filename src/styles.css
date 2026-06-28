@@ -1,1 +1,184 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+:root {
+  /* Fonts */
+  --font-sans: 'Outfit', sans-serif;
+  --font-serif: 'Lora', serif;
+
+  /* Colors - Warm Cozy Cream & Amber */
+  --color-bg-app: #fbf9f6;          /* Warm soft cream */
+  --color-bg-card: #ffffff;         /* Pure white */
+  --color-primary: #d97706;         /* Amber */
+  --color-primary-hover: #b45309;   /* Darker amber */
+  --color-primary-light: #fef3c7;   /* Soft amber tint */
+  --color-text-main: #2d312e;       /* Deep warm grey/charcoal */
+  --color-text-muted: #6b7280;      /* Muted grey */
+  --color-border: #ebdcd0;          /* Soft warm border */
+  --color-border-hover: #d9c3b0;    /* Focus border */
+  --color-shadow: rgba(45, 49, 46, 0.05);
+
+  /* Status Colors */
+  --color-status-backlog: #6b7280;
+  --color-status-playing: #3b82f6;
+  --color-status-completed: #10b981;
+  --color-status-abandoned: #ef4444;
+
+  /* Status Light Colors for Tag Backgrounds */
+  --color-status-backlog-light: #f3f4f6;
+  --color-status-playing-light: #eff6ff;
+  --color-status-completed-light: #ecfdf5;
+  --color-status-abandoned-light: #fef2f2;
+
+  /* Sizes & Borders */
+  --radius-card: 16px;
+  --radius-button: 12px;
+  --radius-tag: 8px;
+  --shadow-sm: 0 2px 8px var(--color-shadow);
+  --shadow-md: 0 8px 24px var(--color-shadow), 0 2px 4px var(--color-shadow);
+  
+  /* Transitions */
+  --transition-cozy: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-app);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+/* Common Layout Components */
+.app-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Nav header styling */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brand-icon {
+  font-size: 2rem;
+}
+
+.brand-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-family: var(--font-serif);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  transition: var(--transition-cozy);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-button);
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.nav-link.active {
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-button);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-cozy);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.btn-danger {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+.btn-danger:hover {
+  background-color: #fca5a5;
+  color: #b91c1c;
+}
+
+/* Accessibility classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
