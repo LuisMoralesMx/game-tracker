@@ -28,12 +28,12 @@ Implement a secure, cozy, single-page application authentication system using Go
 
 ### A. Google Client SDK Integration
 - [ ] Load the client library `https://accounts.google.com/gsi/client` dynamically in the `AuthService` on bootstrap.
-- [ ] Initialize the SDK with the developer's Client ID.
+- [ ] Initialize the SDK with the developer's Client ID, loaded dynamically from runtime configuration.
 
 ### B. User Session & Login flow
 - [ ] Renders the standard Google SSO button in the login component.
 - [ ] Parses Google's ID Token (JWT) credential response, decodes profile metadata (unique ID `sub`, email, name, avatar picture URL), and populates a reactive user profile signal.
-- [ ] Stores session locally so reloading does not require re-authentication.
+- [ ] Stores session locally under the session key loaded from runtime configuration, so reloading does not require re-authentication.
 
 ### C. Route Guard & Redirection
 - [ ] Prevent accessing private dashboard/library pages for anonymous requests.
@@ -62,15 +62,20 @@ Implement a secure, cozy, single-page application authentication system using Go
 * **Component Styles:** [login.css](file:///c:/Development/game-tracker/src/app/components/login/login.css)
 * **Auth Service:** [auth.ts](file:///c:/Development/game-tracker/src/app/services/auth.ts)
 * **Auth Guard:** [auth.guard.ts](file:///c:/Development/game-tracker/src/app/guards/auth.guard.ts)
+* **Runtime Config Service:** [config.ts](file:///c:/Development/game-tracker/src/app/services/config.ts)
+* **Runtime Config File:** [config.json](file:///c:/Development/game-tracker/public/assets/config/config.json)
 
 ---
 
 ## 5. Verification & Testing
 * **Automated Tests:**
+  - Verify configuration service, fallback logic, and HTTP loading:
+    `ng test --include=src/app/services/config.spec.ts`
   - Verify auth service instantiation, sign-out functionality, and guard behavior:
     `ng test --include=src/app/services/auth.spec.ts`
 * **Manual Verification Steps:**
-  1. **Step 1**: Attempt to navigate directly to `/dashboard` when logged out -> **Expected**: App redirects to `/login`.
-  2. **Step 2**: Click the Google login button, sign in with credentials -> **Expected**: App signs user in and navigates to `/dashboard`.
-  3. **Step 3**: Refresh page -> **Expected**: Session persists, user stays logged in.
-  4. **Step 4**: Click "Sign Out" in header -> **Expected**: Session cleared, redirects back to `/login`.
+  1. **Step 1**: Run the app and inspect the network tab to verify `/assets/config/config.json` is successfully fetched during bootstrap.
+  2. **Step 2**: Attempt to navigate directly to `/dashboard` when logged out -> **Expected**: App redirects to `/login`.
+  3. **Step 3**: Click the Google login button, sign in with credentials -> **Expected**: App signs user in and navigates to `/dashboard`.
+  4. **Step 4**: Refresh page -> **Expected**: Session persists, user stays logged in using the dynamic session key.
+  5. **Step 5**: Click "Sign Out" in header -> **Expected**: Session cleared, redirects back to `/login`.

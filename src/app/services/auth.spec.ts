@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AuthService } from './auth';
+import { AppConfigService } from './config';
 
 @Component({
   template: ''
@@ -16,7 +17,14 @@ describe('AuthService', () => {
       providers: [
         provideRouter([
           { path: 'login', component: DummyLoginComponent }
-        ])
+        ]),
+        {
+          provide: AppConfigService,
+          useValue: {
+            googleClientId: 'mock-client-id',
+            sessionKey: 'cozy-game-tracker-session'
+          }
+        }
       ]
     });
     service = TestBed.inject(AuthService);

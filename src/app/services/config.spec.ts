@@ -31,7 +31,7 @@ describe('AppConfigService', () => {
 
   it('should have default config values from JSON import initially', () => {
     expect(service.googleClientId).toBeTruthy();
-    expect(service.sessionKey).toBe('cozy-game-tracker-session');
+    expect(service.sessionKey).toBe('YOUR_SESSION_KEY');
   });
 
   it('should load configuration successfully from http', async () => {
@@ -61,6 +61,6 @@ describe('AppConfigService', () => {
     await loadPromise; // Should not throw/reject
 
     expect(service.googleClientId).toBeTruthy();
-    expect(service.sessionKey).toBe('cozy-game-tracker-session');
+    expect(service.sessionKey).toBe('YOUR_SESSION_KEY');
   });
 });
