@@ -2,7 +2,7 @@
   <div class="form-header">
     <h2>
       @if (isEditMode()) {
-      Reflect on "{{ title() }}"
+      Reflect on "{{ gameModel().title }}"
       } @else {
       Log a New Adventure
       }
@@ -20,17 +20,17 @@
     <!-- Title -->
     <div class="form-group">
       <label for="game-title" class="form-label required">Game Title</label>
-      <input id="game-title" type="text" [(ngModel)]="title" name="title" placeholder="e.g. Outer Wilds"
-        class="form-control" [class.has-error]="showTitleError()" (input)="showTitleError.set(false)" required />
-      @if (showTitleError()) {
-      <span class="error-message" id="title-error">Please enter the game's title.</span>
+      <input id="game-title" type="text" [formField]="gameForm.title" placeholder="e.g. Outer Wilds"
+        class="form-control" [class.has-error]="gameForm.title().touched() && gameForm.title().errors().length > 0" />
+      @if (gameForm.title().touched() && gameForm.title().errors().length > 0) {
+      <span class="error-message" id="title-error">{{ gameForm.title().errors()[0].message }}</span>
       }
     </div>
 
     <!-- Platform -->
     <div class="form-group">
       <label for="game-platform" class="form-label">Platform</label>
-      <input id="game-platform" type="text" [(ngModel)]="platform" name="platform"
+      <input id="game-platform" type="text" [formField]="gameForm.platform"
         placeholder="e.g. Nintendo Switch, PC" class="form-control" list="platforms-list" />
       <datalist id="platforms-list">
         @for (plat of standardPlatforms; track plat) {
@@ -44,7 +44,7 @@
       <!-- Status -->
       <div class="form-group">
         <label for="game-status" class="form-label">Gameplay Status</label>
-        <select id="game-status" [(ngModel)]="status" name="status" class="form-select">
+        <select id="game-status" [formField]="gameForm.status" class="form-select">
           <option value="Backlog">Backlog</option>
           <option value="Playing">Playing</option>
           <option value="Completed">Completed</option>
@@ -56,8 +56,11 @@
       <div class="form-group">
         <label for="game-rating" class="form-label">Personal Rating (1-10)</label>
         <div class="rating-control">
-          <input id="game-rating" type="range" min="1" max="10" [(ngModel)]="rating" name="rating" class="form-range" />
-          <span class="rating-display">⭐ {{ rating() }}/10</span>
+          <select id="game-rating" [formField]="gameForm.rating" class="form-select">
+            @for (r of [1,2,3,4,5,6,7,8,9,10]; track r) {
+              <option [value]="r">⭐ {{ r }}/10</option>
+            }
+          </select>
         </div>
       </div>
     </div>
@@ -66,7 +69,7 @@
     <div class="form-group">
       <label for="game-playtime" class="form-label">Hours Logged</label>
       <div class="number-input-group">
-        <input id="game-playtime" type="number" min="0" [(ngModel)]="playTime" name="playTime" class="form-control"
+        <input id="game-playtime" type="number" [formField]="gameForm.playTime" class="form-control"
           placeholder="0" />
         <span class="input-suffix">hours</span>
       </div>
@@ -77,14 +80,14 @@
       <!-- Start Date -->
       <div class="form-group">
         <label for="game-start-date" class="form-label">Date Started</label>
-        <input id="game-start-date" type="date" [(ngModel)]="startDate" name="startDate" class="form-control" />
+        <input id="game-start-date" type="date" [formField]="gameForm.startDate" class="form-control" />
       </div>
 
       <!-- Completion Date -->
-      @if (showCompletionDate()) {
+      @if (!gameForm.completionDate().hidden()) {
       <div class="form-group fade-in">
         <label for="game-completion-date" class="form-label">Date Completed</label>
-        <input id="game-completion-date" type="date" [(ngModel)]="completionDate" name="completionDate"
+        <input id="game-completion-date" type="date" [formField]="gameForm.completionDate"
           class="form-control" />
       </div>
       }
@@ -93,7 +96,7 @@
     <!-- Notes / Review -->
     <div class="form-group">
       <label for="game-notes" class="form-label">Thoughts & Reflection</label>
-      <textarea id="game-notes" [(ngModel)]="notes" name="notes" rows="4"
+      <textarea id="game-notes" [formField]="gameForm.notes" rows="4"
         placeholder="Write a brief review, highlight memorable moments, or note down why you chose to play this..."
         class="form-control textarea-control"></textarea>
     </div>
@@ -111,7 +114,7 @@
         <button type="button" routerLink="/library" class="btn btn-secondary" id="form-cancel-btn">
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary" id="form-submit-btn">
+        <button type="submit" [disabled]="gameForm().invalid()" class="btn btn-primary" id="form-submit-btn">
           💾 Save Journal Entry
         </button>
       </div>

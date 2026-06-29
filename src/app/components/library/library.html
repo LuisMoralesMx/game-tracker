@@ -65,6 +65,7 @@
     (click)="updateStatusFilter('All')" 
     [class.active]="selectedStatus() === 'All'"
     class="tab-btn"
+    id="filter-status-all"
   >
     All
   </button>
@@ -72,6 +73,7 @@
     (click)="updateStatusFilter('Backlog')" 
     [class.active]="selectedStatus() === 'Backlog'"
     class="tab-btn"
+    id="filter-status-backlog"
   >
     Backlog
   </button>
@@ -79,6 +81,7 @@
     (click)="updateStatusFilter('Playing')" 
     [class.active]="selectedStatus() === 'Playing'"
     class="tab-btn"
+    id="filter-status-playing"
   >
     Playing
   </button>
@@ -86,6 +89,7 @@
     (click)="updateStatusFilter('Completed')" 
     [class.active]="selectedStatus() === 'Completed'"
     class="tab-btn"
+    id="filter-status-completed"
   >
     Completed
   </button>
@@ -93,6 +97,7 @@
     (click)="updateStatusFilter('Abandoned')" 
     [class.active]="selectedStatus() === 'Abandoned'"
     class="tab-btn"
+    id="filter-status-abandoned"
   >
     Abandoned
   </button>
