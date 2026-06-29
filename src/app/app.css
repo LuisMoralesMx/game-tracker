@@ -1,0 +1,61 @@
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  padding: 0.375rem 0.75rem;
+  padding-right: 0.5rem;
+  border-radius: 50px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-cozy);
+}
+
+.user-profile-header:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid var(--color-primary-light);
+}
+
+.user-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  transition: var(--transition-cozy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}

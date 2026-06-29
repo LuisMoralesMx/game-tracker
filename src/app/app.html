@@ -4,11 +4,24 @@
       <span class="brand-icon">🎮</span>
       <h1 class="brand-title">Cozy Game Tracker</h1>
     </a>
+
+    @if (isAuthenticated()) {
     <nav class="nav-links" aria-label="Main Navigation">
       <a routerLink="/dashboard" routerLinkActive="active" class="nav-link" id="nav-link-dashboard">Dashboard</a>
       <a routerLink="/library" routerLinkActive="active" class="nav-link" id="nav-link-library">Library</a>
       <a routerLink="/game/new" routerLinkActive="active" class="nav-link" id="nav-link-add-game">Add Game</a>
     </nav>
+
+    @if (currentUser(); as user) {
+    <div class="user-profile-header">
+      <img [src]="user.picture" [alt]="user.name" class="user-avatar" referrerPolicy="no-referrer" />
+      <span class="user-name">{{ user.name.split(' ')[0] }}</span>
+      <button (click)="logout()" class="btn-logout" id="btn-logout" aria-label="Sign Out">
+        <span>Sign Out</span>
+      </button>
+    </div>
+    }
+    }
   </header>
 
   <main>

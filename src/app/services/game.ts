@@ -1,9 +1,10 @@
-import { Service, signal, computed } from '@angular/core';
+import { Service, signal, computed, inject, effect } from '@angular/core';
 import { Game } from '../models/game.model';
+import { AuthService } from './auth';
 
 @Service()
 export class GameService {
-  private readonly STORAGE_KEY = 'cozy-game-tracker-library';
+  private readonly authService = inject(AuthService);
   private readonly _games = signal<Game[]>([]);
 
   // Expose read-only games signal
@@ -14,23 +15,43 @@ export class GameService {
   readonly completedGames = computed(() => this._games().filter(g => g.status === 'Completed').length);
 
   constructor() {
-    this.loadFromStorage();
+    // Load from storage reactively when the authenticated user changes
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.loadFromStorage(user.id);
+      } else {
+        this._games.set([]);
+      }
+    });
   }
 
-  private loadFromStorage() {
+  private getStorageKey(userId: string): string {
+    return `cozy-game-tracker-library_${userId}`;
+  }
+
+  private loadFromStorage(userId: string) {
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const key = this.getStorageKey(userId);
+      const stored = localStorage.getItem(key);
       if (stored) {
         this._games.set(JSON.parse(stored));
+      } else {
+        this._games.set([]);
       }
     } catch (error) {
       console.error('Failed to load games from localStorage:', error);
+      this._games.set([]);
     }
   }
 
   private saveToStorage(games: Game[]) {
+    const user = this.authService.currentUser();
+    if (!user) return;
+
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(games));
+      const key = this.getStorageKey(user.id);
+      localStorage.setItem(key, JSON.stringify(games));
     } catch (error) {
       console.error('Failed to save games to localStorage:', error);
     }
@@ -74,3 +95,4 @@ export class GameService {
     return this._games().find(g => g.id === id);
   }
 }
+
