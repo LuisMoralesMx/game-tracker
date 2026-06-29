@@ -1,15 +1,22 @@
 import { Service, signal, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserProfile } from '../models/user.model';
+import { AppConfigService } from './config';
 
 declare var google: any;
 
 @Service()
 export class AuthService {
   private readonly router = inject(Router);
-  private readonly SESSION_KEY = 'cozy-game-tracker-session';
-  // Replace this with your actual Google Client ID from Google Cloud Console
-  private readonly CLIENT_ID = 'Replace this with your actual Google Client ID from Google Cloud Console';
+  private readonly configService = inject(AppConfigService);
+
+  private get SESSION_KEY(): string {
+    return this.configService.sessionKey;
+  }
+
+  private get CLIENT_ID(): string {
+    return this.configService.googleClientId;
+  }
 
   private readonly _currentUser = signal<UserProfile | null>(null);
   readonly currentUser = this._currentUser.asReadonly();
