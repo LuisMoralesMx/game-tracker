@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { Component, ElementRef, inject, viewChild, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
@@ -8,22 +8,23 @@ import { AuthService } from '../../services/auth';
   styleUrl: './login.css',
   imports: [],
 })
-export class Login implements AfterViewInit {
+export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  @ViewChild('googleBtnContainer', { static: false }) googleBtnContainer!: ElementRef;
+  readonly googleBtnContainer = viewChild<ElementRef>('googleBtnContainer');
 
   constructor() {
     // If already authenticated, redirect to dashboard immediately
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
-  }
 
-  ngAfterViewInit(): void {
-    if (this.googleBtnContainer) {
-      this.authService.renderGoogleButton(this.googleBtnContainer.nativeElement);
-    }
+    effect(() => {
+      const container = this.googleBtnContainer();
+      if (container) {
+        this.authService.renderGoogleButton(container.nativeElement);
+      }
+    });
   }
 }
